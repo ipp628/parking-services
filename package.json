@@ -1,8 +1,0 @@
-{
-  "name": "parking-tracker",
-  "version": "1.0.0",
-  "private": true,
-  "type": "module",
-  "engines": { "node": "24.x" },
-  "dependencies": { "@neondatabase/serverless": "^0.10.4" }
-}
