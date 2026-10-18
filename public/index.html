@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a52c9">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Parking Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,8 +12,7 @@
 <style>
 :root{
   --concrete:#e4e8ec; --panel:#f6f8fa; --ink:#18212b; --muted:#5b6876; --line:#cdd4db;
-  --sign:#0a52c9; --sign-ink:#fff; --exit:#c8372d; --ok:#14804a; --plate:#fff; --plate-ink:#111820;
-  --stall:#0a52c9;
+  --sign:#0a52c9; --sign-ink:#fff; --exit:#c8372d; --ok:#14804a; --plate:#fff; --plate-ink:#111820; --stall:#0a52c9;
   --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
@@ -21,39 +22,48 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--concrete);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding:20px 16px 48px}
 .wrap{max-width:960px;margin:0 auto}
-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
 .psign{width:54px;height:54px;border-radius:12px;background:var(--sign);color:var(--sign-ink);display:grid;place-items:center;font:700 40px/1 var(--display);box-shadow:inset 0 0 0 3px rgba(255,255,255,.85)}
-header h1{margin:0;font:700 34px/1 var(--display);letter-spacing:.01em}
+header h1{margin:0;font:700 34px/1 var(--display)}
 header p{margin:2px 0 0;color:var(--muted);font-size:14px}
-.clock{margin-left:auto;text-align:right;font:600 26px/1 var(--display);letter-spacing:.03em}
+.right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.clock{text-align:right;font:600 26px/1 var(--display);letter-spacing:.03em}
 .clock small{display:block;font:400 12px var(--body);color:var(--muted);letter-spacing:0;margin-top:3px}
+.pill{display:inline-block;text-decoration:none;color:var(--sign);border:1.5px solid var(--sign);border-radius:99px;padding:7px 14px;font-weight:600;font-size:14px}
+.pill:hover{background:var(--sign);color:#fff}
 
-.gate{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.gate{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center}
 .plate{background:var(--plate);border:3px solid var(--plate-ink);border-radius:12px;padding:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .plate input{width:100%;border:1.5px solid var(--plate-ink);border-radius:8px;background:transparent;color:var(--plate-ink);text-align:center;text-transform:uppercase;font:700 clamp(32px,7vw,48px)/1.15 var(--display);letter-spacing:.14em;padding:6px 8px;outline:none}
 .plate input::placeholder{color:#9aa5b1;letter-spacing:.08em}
 .plate:focus-within{box-shadow:0 0 0 4px color-mix(in srgb,var(--sign) 35%,transparent)}
 .btns{display:flex;gap:10px}
 button{font:600 17px var(--body);border:0;border-radius:12px;padding:16px 26px;color:#fff;cursor:pointer;transition:transform .08s,filter .15s}
-button:active{transform:translateY(1px)}
-button:hover{filter:brightness(1.08)}
-button:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button:active{transform:translateY(1px)}button:hover{filter:brightness(1.08)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+button:disabled{opacity:.6;cursor:wait}
 .b-in{background:var(--sign)}.b-out{background:var(--exit)}
-.msg{grid-column:1/-1;min-height:22px;font-weight:500;color:var(--muted)}
-.msg.good{color:var(--ok)}.msg.bad{color:var(--exit)}
+.hint{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}
+.msg{font-weight:500;min-height:20px}.msg.good{color:var(--ok)}.msg.bad{color:var(--exit)}
+kbd{font:600 12px var(--body);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--concrete)}
 
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
 .stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.stat b{display:block;font:700 40px/1 var(--display);letter-spacing:.01em}
+.stat b{display:block;font:700 40px/1 var(--display)}
 .stat span{color:var(--muted);font-size:13px}
+
+.search{display:flex;gap:10px;margin-bottom:18px}
+.search input{flex:1;font:400 16px var(--body);padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-transform:uppercase}
+.search input::placeholder{text-transform:none;color:var(--muted)}
 
 h2{font:700 24px/1 var(--display);margin:0 0 12px;display:flex;align-items:baseline;gap:10px}
 h2 em{font:500 14px var(--body);font-style:normal;color:var(--muted)}
+h2 .sp{margin-left:auto}
+.ghost{background:transparent;color:var(--sign);border:1.5px solid var(--sign);padding:7px 14px;font-size:14px;border-radius:99px}
 .lot{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:26px}
 .stall{background:var(--panel);border:2px dashed var(--stall);border-radius:6px;padding:14px 12px 12px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
 .chip{background:var(--plate);color:var(--plate-ink);border:2.5px solid var(--plate-ink);border-radius:8px;padding:2px 14px;font:700 28px/1.2 var(--display);letter-spacing:.12em}
-.stall .t{font-size:13px;color:var(--muted)}
-.stall .t b{color:var(--ink);font-weight:600}
+.stall .t{font-size:13px;color:var(--muted)}.stall .t b{color:var(--ink);font-weight:600}
 .stall button{width:100%;padding:9px;font-size:14px;background:var(--exit)}
 .empty{grid-column:1/-1;border:2px dashed var(--line);border-radius:10px;padding:28px 16px;text-align:center;color:var(--muted)}
 
@@ -64,11 +74,27 @@ tr:last-child td{border-bottom:0}
 th{color:var(--muted);font-weight:500;font-size:13px}
 td.pl{font:700 20px var(--display);letter-spacing:.1em}
 td.fee{font-weight:600;text-align:right}th:last-child{text-align:right}
+.more{display:block;margin:12px auto 0;}
+.foot{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
 
-@media (max-width:640px){
+h2{flex-wrap:wrap}
+.skel{background:linear-gradient(90deg,var(--line),transparent,var(--line));background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:10px;min-height:130px;opacity:.6}
+@keyframes sh{to{background-position:-200% 0}}
+.stall.long{border-color:#c47f00}.stall.over{border-color:var(--exit)}
+.badge{font-size:12px;font-weight:600;border-radius:99px;padding:2px 10px;color:#fff}
+.badge.long{background:#a15c00}.badge.over{background:var(--exit)}
+.stall.new{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:scale(.93);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}60%{transform:scale(1);box-shadow:0 0 0 12px transparent}100%{box-shadow:none}}
+.stall button.armed{background:#7a1d16;outline:3px solid var(--exit);outline-offset:2px}
+.seg{display:inline-flex;border:1.5px solid var(--sign);border-radius:99px;overflow:hidden}
+.seg button{border-radius:0;background:transparent;color:var(--sign);padding:6px 14px;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--sign);color:#fff}
+@media (prefers-reduced-motion:reduce){.skel,.stall.new{animation:none}}
+@media (max-width:700px){
   .gate{grid-template-columns:1fr}.btns button{flex:1}
-  .stats{gap:8px}.stat{padding:12px}.stat b{font-size:32px}
-  header h1{font-size:28px}.clock{font-size:20px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:8px}.stat b{font-size:34px}
+  header h1{font-size:28px}.clock{font-size:20px}.right{gap:10px}
+  .hint .keys{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -78,38 +104,58 @@ td.fee{font-weight:600;text-align:right}th:last-child{text-align:right}
   <header>
     <div class="psign" aria-hidden="true">P</div>
     <div><h1>Parking Tracker</h1><p>Log cars in and out, and see who is on the lot.</p></div>
-    <div class="clock"><span id="clk">--:--</span><small id="dt"></small></div>
+    <div class="right">
+      <a class="pill" href="/camera.html">Camera mode</a>
+      <div class="clock"><span id="clk">--:--</span><small id="dt"></small></div>
+    </div>
   </header>
 
   <section class="gate" aria-label="Gate">
-    <div class="plate"><input id="plate" placeholder="ABC 123" autocomplete="off" maxlength="12" aria-label="Plate number"></div>
+    <div class="plate"><input id="plate" placeholder="ABC 123" autocomplete="off" maxlength="12" aria-label="Plate number" autofocus></div>
     <div class="btns"><button class="b-in" id="btnIn">Log entry</button><button class="b-out" id="btnOut">Log exit</button></div>
-    <div class="msg" id="msg" role="status"></div>
+    <div class="hint"><div class="msg" id="msg" role="status"></div><div class="keys"><kbd>Enter</kbd> entry &nbsp; <kbd>Shift</kbd>+<kbd>Enter</kbd> exit</div></div>
   </section>
 
   <section class="stats">
     <div class="stat"><b id="sIn">0</b><span>Cars on the lot</span></div>
     <div class="stat"><b id="sToday">0</b><span>Visits today</span></div>
-    <div class="stat"><b id="sRev">$0.00</b><span>Fees collected</span></div>
+    <div class="stat"><b id="sRevToday">$0.00</b><span>Fees today</span></div>
+    <div class="stat"><b id="sRev">$0.00</b><span>Fees all time</span></div>
   </section>
+
+  <div class="search"><input id="q" placeholder="Search a plate on the lot or in recent visits" autocomplete="off" aria-label="Search plates"></div>
 
   <h2>On the lot <em id="lotCount"></em></h2>
   <div class="lot" id="lot"></div>
 
-  <h2>Recent visits</h2>
+  <h2>Recent visits <em id="histCount"></em><span class="sp" style="display:flex;gap:10px;align-items:center"><span class="seg" role="group" aria-label="Range"><button id="rAll" aria-pressed="true">All</button><button id="rToday" aria-pressed="false">Today</button></span><button class="ghost" id="btnCsv">Export CSV</button></span></h2>
   <div class="hist"><table id="tHist"></table></div>
+  <button class="ghost more" id="btnMore" hidden>Show more</button>
+  <div class="foot" id="updated"></div>
 </div>
 
 <script>
 var $=function(i){return document.getElementById(i)};
-var state={active:[],history:[],rate:3};
+var state={active:[],history:[],rate:3,stats:{today:0,revenue:0},q:"",shown:10,loaded:false,range:"all",known:null,fresh:{}};
+var busy=false;
 function pw(){try{return localStorage.getItem("pw")||""}catch(e){return ""}}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
-function fmt(t){return new Date(t).toLocaleString([],{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"})}
-function dur(ms){var m=Math.max(0,Math.floor(ms/60000)),h=Math.floor(m/60);return(h?h+"h ":"")+(m%60)+"m"}
+function tm(d){return new Date(d).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
+function day(t){
+  var d=new Date(t),n=new Date(),y=new Date();y.setDate(n.getDate()-1);
+  if(d.toDateString()===n.toDateString())return "Today "+tm(d);
+  if(d.toDateString()===y.toDateString())return "Yesterday "+tm(d);
+  return d.toLocaleDateString([],{month:"short",day:"numeric"})+" "+tm(d);
+}
+function dur(ms){var m=Math.max(0,Math.floor(ms/60000)),h=Math.floor(m/60),d=Math.floor(h/24);if(d)return d+"d "+(h%24)+"h";return(h?h+"h ":"")+(m%60)+"m"}
 function est(ms){return Math.max(1,Math.ceil(ms/3600000))*state.rate}
-function msg(t,c){var e=$("msg");e.textContent=t;e.className="msg "+(c||"")}
+var msgTimer;
+function msg(t,c){var e=$("msg");e.textContent=t;e.className="msg "+(c||"");clearTimeout(msgTimer);if(c==="good")msgTimer=setTimeout(function(){e.textContent="";e.className="msg"},8000);if(navigator.vibrate)navigator.vibrate(c==="bad"?[60,40,60]:25)}
+function setBtns(){var ok=!busy&&norm($("plate").value).length>=1;$("btnIn").disabled=$("btnOut").disabled=!ok}
 function tick(){var d=new Date();$("clk").textContent=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});$("dt").textContent=d.toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"})}
+function norm(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
+function match(p){var q=norm(state.q);return !q||norm(p).indexOf(q)>-1}
+function money(n){return "$"+Number(n).toFixed(2)}
 
 async function api(path,method,body){
   var r=await fetch(path,{method:method||"GET",headers:{"Content-Type":"application/json","x-app-password":pw()},body:body?JSON.stringify(body):undefined});
@@ -124,44 +170,81 @@ async function api(path,method,body){
 }
 async function act(kind,plate){
   plate=plate||$("plate").value;
+  busy=true;setBtns();
   try{
     var r=await api("/api/"+kind,"POST",{plate:plate});
-    if(kind==="entry")msg(r.plate+" entered at "+fmt(r.entry_time),"good");
-    else msg(r.plate+" left after "+dur(new Date(r.exit_time)-new Date(r.entry_time))+". Fee: $"+Number(r.fee).toFixed(2),"good");
-    $("plate").value="";load();
+    if(kind==="entry")msg(r.plate+" entered at "+tm(r.entry_time),"good");
+    else msg(r.plate+" left after "+dur(new Date(r.exit_time)-new Date(r.entry_time))+". Fee: "+money(r.fee),"good");
+    $("plate").value="";await load();
   }catch(e){msg(e.message,"bad")}
+  busy=false;setBtns();$("plate").focus();
+}
+
+function renderStats(){
+  var n=new Date().toDateString(),ft=0;
+  state.history.forEach(function(r){if(new Date(r.exit_time).toDateString()===n)ft+=Number(r.fee||0)});
+  $("sIn").textContent=state.active.length;$("sToday").textContent=state.stats.today;
+  $("sRevToday").textContent=money(ft);$("sRev").textContent=money(state.stats.revenue);
 }
 function renderLot(){
-  var a=state.active;
-  $("lotCount").textContent=a.length?a.length+(a.length===1?" car":" cars"):"";
-  if(!a.length){$("lot").innerHTML="<div class='empty'>The lot is empty. Type a plate above and press Log entry.</div>";return}
+  if(!state.loaded){$("lot").innerHTML="<div class='skel'></div><div class='skel'></div><div class='skel'></div>";return}
+  var all=state.active.slice().sort(function(a,b){return new Date(a.entry_time)-new Date(b.entry_time)});
+  var a=all.filter(function(r){return match(r.plate)});
+  $("lotCount").textContent=all.length?(state.q?a.length+" of ":"")+all.length+(all.length===1?" car":" cars"):"";
+  if(!a.length){$("lot").innerHTML="<div class='empty'>"+(all.length?"No parked car matches that search.":"The lot is empty. Type a plate above and press Log entry.")+"</div>";return}
   $("lot").innerHTML=a.map(function(r){
     var ms=Date.now()-new Date(r.entry_time);
-    return "<div class='stall'><div class='chip'>"+esc(r.plate)+"</div>"+
-      "<div class='t'>In at <b>"+fmt(r.entry_time)+"</b><br>Parked <b>"+dur(ms)+"</b> &middot; est. <b>$"+est(ms).toFixed(2)+"</b></div>"+
+    var cls=ms>=864e5?" over":ms>=432e5?" long":"",bd=ms>=864e5?"<span class='badge over'>Over 24 hours</span>":ms>=432e5?"<span class='badge long'>Long stay</span>":"";
+    return "<div class='stall"+cls+(state.fresh[r.id]?" new":"")+"'><div class='chip'>"+esc(r.plate)+"</div>"+bd+
+      "<div class='t'>In "+day(r.entry_time)+"<br>Parked <b>"+dur(ms)+"</b> &middot; est. <b>"+money(est(ms))+"</b></div>"+
       "<button data-p='"+esc(r.plate)+"'>Log exit</button></div>";
   }).join("");
 }
 function renderHist(){
-  var d=state.history;
-  if(!d.length){$("tHist").innerHTML="<tr><td style='color:var(--muted);padding:18px 8px'>No completed visits yet. They show up here after a car leaves.</td></tr>";return}
+  var nd=new Date().toDateString();var f=state.history.filter(function(r){return match(r.plate)&&(state.range==="all"||new Date(r.exit_time).toDateString()===nd)});
+  $("histCount").textContent=state.history.length?(f.length>state.shown?"showing "+state.shown+" of "+f.length:f.length+(f.length===1?" visit":" visits")):"";
+  $("btnMore").hidden=f.length<=state.shown;
+  if(!f.length){$("tHist").innerHTML="<tr><td style='color:var(--muted);padding:18px 8px'>"+(!state.loaded?"Loading...":state.history.length?"Nothing matches. Try clearing the search or choosing All.":"No completed visits yet. They show up here after a car leaves.")+"</td></tr>";return}
   var h="<tr><th>Plate</th><th>In</th><th>Out</th><th>Time parked</th><th>Fee</th></tr>";
-  d.forEach(function(r){h+="<tr><td class='pl'>"+esc(r.plate)+"</td><td>"+fmt(r.entry_time)+"</td><td>"+fmt(r.exit_time)+"</td><td>"+dur(new Date(r.exit_time)-new Date(r.entry_time))+"</td><td class='fee'>$"+Number(r.fee).toFixed(2)+"</td></tr>"});
+  f.slice(0,state.shown).forEach(function(r){h+="<tr><td class='pl'>"+esc(r.plate)+"</td><td>"+day(r.entry_time)+"</td><td>"+day(r.exit_time)+"</td><td>"+dur(new Date(r.exit_time)-new Date(r.entry_time))+"</td><td class='fee'>"+money(r.fee)+"</td></tr>"});
   $("tHist").innerHTML=h;
 }
+function render(){renderStats();renderLot();renderHist()}
 async function load(){
   try{
     var d=await api("/api/records");
-    state.active=d.active;state.history=d.history;if(d.rate)state.rate=d.rate;
-    $("sIn").textContent=d.active.length;$("sToday").textContent=d.stats.today;$("sRev").textContent="$"+d.stats.revenue.toFixed(2);
-    renderLot();renderHist();
-  }catch(e){msg(e.message,"bad")}
+    state.active=d.active;state.history=d.history;state.stats=d.stats;if(d.rate)state.rate=d.rate;
+    var ids={};d.active.forEach(function(r){ids[r.id]=1});state.fresh={};
+    if(state.known){d.active.forEach(function(r){if(!state.known[r.id])state.fresh[r.id]=1})}
+    state.known=ids;state.loaded=true;
+    $("updated").textContent="Updated "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+". Refreshes every 30 seconds.";
+    render();state.fresh={};
+  }catch(e){$("updated").textContent="Could not refresh: "+e.message+". Trying again soon."}
 }
+function csv(){
+  var rows=[["Plate","Time in","Time out","Minutes parked","Fee"]];
+  state.history.forEach(function(r){rows.push([r.plate,new Date(r.entry_time).toLocaleString(),new Date(r.exit_time).toLocaleString(),Math.round((new Date(r.exit_time)-new Date(r.entry_time))/60000),Number(r.fee).toFixed(2)])});
+  var text=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(",")}).join("\n");
+  var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"text/csv"}));
+  a.download="parking-visits-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();
+}
+
 $("btnIn").onclick=function(){act("entry")};
 $("btnOut").onclick=function(){act("exit")};
-$("plate").onkeydown=function(e){if(e.key==="Enter")act("entry")};
-$("lot").onclick=function(e){var p=e.target.getAttribute&&e.target.getAttribute("data-p");if(p)act("exit",p)};
-tick();setInterval(tick,15000);
+$("plate").onkeydown=function(e){if(e.key==="Enter"&&norm(this.value).length>=1)act(e.shiftKey?"exit":"entry")};
+$("plate").oninput=function(){var v=this.value.toUpperCase().replace(/[^A-Z0-9 -]/g,"");if(v!==this.value)this.value=v;setBtns()};
+$("lot").onclick=function(e){
+  var b=e.target,p=b.getAttribute&&b.getAttribute("data-p");if(!p)return;
+  if(b.classList.contains("armed")){act("exit",p);return}
+  b.classList.add("armed");b.textContent="Tap again to confirm";
+  setTimeout(function(){if(b.isConnected){b.classList.remove("armed");b.textContent="Log exit"}},3000);
+};
+$("q").oninput=function(){state.q=this.value;state.shown=10;render()};
+$("btnMore").onclick=function(){state.shown+=10;renderHist()};
+function setRange(r){state.range=r;state.shown=10;$("rAll").setAttribute("aria-pressed",String(r==="all"));$("rToday").setAttribute("aria-pressed",String(r==="today"));renderHist()}
+$("rAll").onclick=function(){setRange("all")};$("rToday").onclick=function(){setRange("today")};
+$("btnCsv").onclick=csv;
+tick();setBtns();render();setInterval(tick,15000);
 setInterval(renderLot,20000);
 setInterval(load,30000);load();
 </script>
