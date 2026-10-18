@@ -4,112 +4,135 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0a52c9">
-<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Parking Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --concrete:#e4e8ec; --panel:#f6f8fa; --ink:#18212b; --muted:#5b6876; --line:#cdd4db;
-  --sign:#0a52c9; --sign-ink:#fff; --exit:#c8372d; --ok:#14804a; --plate:#fff; --plate-ink:#111820; --stall:#0a52c9;
-  --display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;
-  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-}
-@media (prefers-color-scheme:dark){
-  :root{--concrete:#0f151c;--panel:#18212b;--ink:#e8edf2;--muted:#93a1b0;--line:#2b3947;--sign:#3b82f6;--exit:#ef6a5f;--ok:#4cc38a;--plate:#f4f6f8;--stall:#5a9bff}
-}
+:root{--bg:#eef2f7;--card:#fff;--ink:#14202e;--muted:#5a6878;--line:#dbe2ea;--sign:#0a52c9;--exit:#d23a30;--ok:#13874d;--amber:#ffb703;--plate:#fff;--plate-ink:#111820;
+--display:"Barlow Condensed","Arial Narrow",Impact,sans-serif;--body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#0c1118;--card:#151d27;--ink:#e8edf2;--muted:#8fa0b2;--line:#263444;--sign:#4b8cff;--ok:#4cc38a}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--concrete);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding:20px 16px 48px}
-.wrap{max-width:960px;margin:0 auto}
-header{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap}
-.psign{width:54px;height:54px;border-radius:12px;background:var(--sign);color:var(--sign-ink);display:grid;place-items:center;font:700 40px/1 var(--display);box-shadow:inset 0 0 0 3px rgba(255,255,255,.85)}
-header h1{margin:0;font:700 34px/1 var(--display)}
-header p{margin:2px 0 0;color:var(--muted);font-size:14px}
-.right{margin-left:auto;display:flex;align-items:center;gap:16px}
-.clock{text-align:right;font:600 26px/1 var(--display);letter-spacing:.03em}
-.clock small{display:block;font:400 12px var(--body);color:var(--muted);letter-spacing:0;margin-top:3px}
-.pill{display:inline-block;text-decoration:none;color:var(--sign);border:1.5px solid var(--sign);border-radius:99px;padding:7px 14px;font-weight:600;font-size:14px}
-.pill:hover{background:var(--sign);color:#fff}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 var(--body);padding-bottom:48px}
+.wrap{max-width:980px;margin:0 auto;padding:0 16px}
+svg.i{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-.gate{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px;display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center}
+/* hero */
+.hero{background:radial-gradient(900px 300px at 85% -20%,rgba(255,255,255,.22),transparent 60%),linear-gradient(135deg,#072f7d,#0a52c9 55%,#2b86ec);color:#fff;padding:22px 0 84px;position:relative}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(90deg,var(--amber) 0 36px,transparent 36px 62px);opacity:.9}
+.hero-in{display:grid;grid-template-columns:1fr auto;gap:20px;align-items:center}
+.brand{display:flex;gap:14px;align-items:center}
+.psign{width:64px;height:64px;border-radius:14px;background:#fff;color:var(--sign);display:grid;place-items:center;font:700 48px/1 var(--display);box-shadow:0 6px 18px rgba(0,0,0,.25),inset 0 0 0 4px #0a52c9,inset 0 0 0 6px #fff}
+h1{margin:0;font:700 40px/1 var(--display);letter-spacing:.01em}
+.brand p{margin:4px 0 0;opacity:.85;font-size:14px}
+.top{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.clock{font:600 26px/1 var(--display);letter-spacing:.04em}.clock small{font:400 13px var(--body);opacity:.8;margin-left:8px;letter-spacing:0}
+.pill{color:#fff;text-decoration:none;border:1.5px solid rgba(255,255,255,.7);border-radius:99px;padding:6px 14px;font-weight:600;font-size:14px}
+.pill:hover{background:#fff;color:var(--sign)}
+.ring{display:flex;gap:16px;align-items:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(6px);border-radius:20px;padding:14px 20px}
+.ring svg{width:112px;height:112px;flex:none}
+.ring .num{font:700 34px/1 var(--display)}.ring .lbl{font-size:13px;opacity:.85}
+.ring button{margin-top:6px;font:600 12px var(--body);background:transparent;color:#fff;border:1px solid rgba(255,255,255,.6);border-radius:99px;padding:4px 10px;cursor:pointer}
+
+/* gate card */
+.gate{margin-top:-52px;position:relative;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 18px 40px rgba(8,30,70,.18);display:grid;grid-template-columns:1fr auto;gap:14px 18px;align-items:center}
 .plate{background:var(--plate);border:3px solid var(--plate-ink);border-radius:12px;padding:3px;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
 .plate input{width:100%;border:1.5px solid var(--plate-ink);border-radius:8px;background:transparent;color:var(--plate-ink);text-align:center;text-transform:uppercase;font:700 clamp(32px,7vw,48px)/1.15 var(--display);letter-spacing:.14em;padding:6px 8px;outline:none}
-.plate input::placeholder{color:#9aa5b1;letter-spacing:.08em}
+.plate input::placeholder{color:#9aa5b1}
 .plate:focus-within{box-shadow:0 0 0 4px color-mix(in srgb,var(--sign) 35%,transparent)}
 .btns{display:flex;gap:10px}
 button{font:600 17px var(--body);border:0;border-radius:12px;padding:16px 26px;color:#fff;cursor:pointer;transition:transform .08s,filter .15s}
-button:active{transform:translateY(1px)}button:hover{filter:brightness(1.08)}
-button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-button:disabled{opacity:.6;cursor:wait}
-.b-in{background:var(--sign)}.b-out{background:var(--exit)}
+button:active{transform:translateY(1px)}button:hover{filter:brightness(1.1)}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.b-in{background:linear-gradient(#1f6fe0,#0a52c9)}.b-out{background:linear-gradient(#e24a3f,#c0322a)}
 .hint{grid-column:1/-1;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:13px}
-.msg{font-weight:500;min-height:20px}.msg.good{color:var(--ok)}.msg.bad{color:var(--exit)}
-kbd{font:600 12px var(--body);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--concrete)}
+.msg{font-weight:600;min-height:20px}.msg.good{color:var(--ok)}.msg.bad{color:var(--exit)}
+kbd{font:600 12px var(--body);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:1px 6px;background:var(--bg)}
 
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
-.stat b{display:block;font:700 40px/1 var(--display)}
-.stat span{color:var(--muted);font-size:13px}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;gap:12px;align-items:center}
+.ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none;color:var(--c);background:color-mix(in srgb,var(--c) 15%,transparent)}
+.stat b{display:block;font:700 30px/1 var(--display)}.stat span{color:var(--muted);font-size:13px}
 
-.search{display:flex;gap:10px;margin-bottom:18px}
-.search input{flex:1;font:400 16px var(--body);padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--ink);text-transform:uppercase}
+.search input{width:100%;font:400 16px var(--body);padding:13px 16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);text-transform:uppercase;margin-bottom:22px}
 .search input::placeholder{text-transform:none;color:var(--muted)}
 
-h2{font:700 24px/1 var(--display);margin:0 0 12px;display:flex;align-items:baseline;gap:10px}
-h2 em{font:500 14px var(--body);font-style:normal;color:var(--muted)}
-h2 .sp{margin-left:auto}
-.ghost{background:transparent;color:var(--sign);border:1.5px solid var(--sign);padding:7px 14px;font-size:14px;border-radius:99px}
-.lot{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:26px}
-.stall{background:var(--panel);border:2px dashed var(--stall);border-radius:6px;padding:14px 12px 12px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center}
-.chip{background:var(--plate);color:var(--plate-ink);border:2.5px solid var(--plate-ink);border-radius:8px;padding:2px 14px;font:700 28px/1.2 var(--display);letter-spacing:.12em}
-.stall .t{font-size:13px;color:var(--muted)}.stall .t b{color:var(--ink);font-weight:600}
-.stall button{width:100%;padding:9px;font-size:14px;background:var(--exit)}
-.empty{grid-column:1/-1;border:2px dashed var(--line);border-radius:10px;padding:28px 16px;text-align:center;color:var(--muted)}
-
-.hist{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:6px 14px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{text-align:left;padding:11px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
-tr:last-child td{border-bottom:0}
-th{color:var(--muted);font-weight:500;font-size:13px}
-td.pl{font:700 20px var(--display);letter-spacing:.1em}
-td.fee{font-weight:600;text-align:right}th:last-child{text-align:right}
-.more{display:block;margin:12px auto 0;}
-.foot{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
-
-h2{flex-wrap:wrap}
-.skel{background:linear-gradient(90deg,var(--line),transparent,var(--line));background-size:200% 100%;animation:sh 1.2s linear infinite;border-radius:10px;min-height:130px;opacity:.6}
+/* lot */
+.lotp{background:#2a3038;background-image:radial-gradient(rgba(255,255,255,.05) 1px,transparent 1px);background-size:6px 6px;border-radius:20px;padding:18px 16px 0;margin-bottom:28px;position:relative;overflow:hidden;color:#fff}
+.lotp::after{content:"";display:block;height:34px;margin:14px -16px 0;background:repeating-linear-gradient(90deg,var(--amber) 0 40px,transparent 40px 70px) center/100% 5px no-repeat}
+.lh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.lh h2{margin:0;font:700 26px/1 var(--display);letter-spacing:.03em}.lh em{font-style:normal;color:#aab6c4;font-size:14px}
+.bays{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.bay{border:3px solid rgba(255,255,255,.85);border-bottom:0;border-radius:4px 4px 0 0;min-height:226px;padding:10px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:6px;position:relative;background:rgba(255,255,255,.05)}
+.bay.free{border-color:rgba(255,255,255,.22);background:transparent;justify-content:center;color:rgba(255,255,255,.35);font:600 20px var(--display);letter-spacing:.1em}
+.car{width:54px;height:98px;filter:drop-shadow(0 6px 5px rgba(0,0,0,.45))}
+.chip{background:var(--plate);color:var(--plate-ink);border:2.5px solid var(--plate-ink);border-radius:7px;padding:0 12px;font:700 24px/1.25 var(--display);letter-spacing:.12em}
+.bt{font-size:12.5px;color:#c4cfdb;text-align:center}.bt b{color:#fff}
+.bay button{width:100%;padding:8px;font-size:13px;background:var(--exit);margin-top:auto}
+.bay button.armed{background:#7a1d16;outline:3px solid #fff;outline-offset:1px}
+.bay.long{border-color:var(--amber)}.bay.over{border-color:#ff6b61}
+.badge{position:absolute;top:6px;right:6px;font-size:11px;font-weight:600;border-radius:99px;padding:1px 8px;color:#111;background:var(--amber)}.badge.over{background:#ff6b61}
+.bay.new{animation:pop .9s ease-out}
+@keyframes pop{0%{transform:translateY(-14px);opacity:.2}60%{transform:none;opacity:1;box-shadow:0 0 0 10px rgba(76,195,138,.35)}100%{box-shadow:none}}
+.skel{min-height:226px;border-radius:4px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.13),rgba(255,255,255,.04));background-size:200% 100%;animation:sh 1.2s linear infinite}
 @keyframes sh{to{background-position:-200% 0}}
-.stall.long{border-color:#c47f00}.stall.over{border-color:var(--exit)}
-.badge{font-size:12px;font-weight:600;border-radius:99px;padding:2px 10px;color:#fff}
-.badge.long{background:#a15c00}.badge.over{background:var(--exit)}
-.stall.new{animation:pop .9s ease-out}
-@keyframes pop{0%{transform:scale(.93);box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 55%,transparent)}60%{transform:scale(1);box-shadow:0 0 0 12px transparent}100%{box-shadow:none}}
-.stall button.armed{background:#7a1d16;outline:3px solid var(--exit);outline-offset:2px}
+.empty{grid-column:1/-1;padding:40px 16px;text-align:center;color:#c4cfdb}
+
+/* history */
+.hh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.hh h2{margin:0;font:700 26px/1 var(--display);letter-spacing:.02em}.hh em{font-style:normal;color:var(--muted);font-size:14px}
+.sp{margin-left:auto;display:flex;gap:10px;align-items:center}
 .seg{display:inline-flex;border:1.5px solid var(--sign);border-radius:99px;overflow:hidden}
 .seg button{border-radius:0;background:transparent;color:var(--sign);padding:6px 14px;font-size:14px}
 .seg button[aria-pressed="true"]{background:var(--sign);color:#fff}
-@media (prefers-reduced-motion:reduce){.skel,.stall.new{animation:none}}
-@media (max-width:700px){
-  .gate{grid-template-columns:1fr}.btns button{flex:1}
-  .stats{grid-template-columns:repeat(2,1fr);gap:8px}.stat b{font-size:34px}
-  header h1{font-size:28px}.clock{font-size:20px}.right{gap:10px}
-  .hint .keys{display:none}
+.ghost{background:transparent;color:var(--sign);border:1.5px solid var(--sign);padding:6px 14px;font-size:14px;border-radius:99px}
+.hist{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:4px 14px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:last-child td{border-bottom:0}th{color:var(--muted);font-weight:500;font-size:13px}
+tbody tr:nth-child(even){background:color-mix(in srgb,var(--line) 28%,transparent)}
+.pc{display:inline-block;background:var(--plate);color:var(--plate-ink);border:2px solid var(--plate-ink);border-radius:6px;padding:0 10px;font:700 18px/1.3 var(--display);letter-spacing:.1em}
+.fee{text-align:right}.fp{display:inline-block;background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok);font-weight:600;border-radius:99px;padding:2px 12px}
+th:last-child{text-align:right}
+.more{display:block;margin:12px auto 0}.foot{margin-top:18px;color:var(--muted);font-size:13px;text-align:center}
+
+@media (max-width:760px){
+  .hero-in{grid-template-columns:1fr}.ring{justify-self:stretch}
+  h1{font-size:32px}.psign{width:54px;height:54px;font-size:40px}
+  .gate{grid-template-columns:1fr;margin-top:-44px}.btns button{flex:1}.hint .keys{display:none}
+  .stats{grid-template-columns:repeat(2,1fr);gap:8px}
+  .bays{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
 }
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.skel,.bay.new{animation:none}*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="psign" aria-hidden="true">P</div>
-    <div><h1>Parking Tracker</h1><p>Log cars in and out, and see who is on the lot.</p></div>
-    <div class="right">
-      <a class="pill" href="/camera.html">Camera mode</a>
-      <div class="clock"><span id="clk">--:--</span><small id="dt"></small></div>
-    </div>
-  </header>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="car" viewBox="0 0 60 110">
+<rect x="2" y="18" width="9" height="20" rx="3" fill="#0b0d10"/><rect x="49" y="18" width="9" height="20" rx="3" fill="#0b0d10"/>
+<rect x="2" y="72" width="9" height="20" rx="3" fill="#0b0d10"/><rect x="49" y="72" width="9" height="20" rx="3" fill="#0b0d10"/>
+<rect x="7" y="3" width="46" height="104" rx="19" fill="currentColor"/>
+<path d="M13 36Q30 27 47 36L45 52H15Z" fill="#16222f" opacity=".85"/>
+<rect x="14" y="54" width="32" height="22" rx="7" fill="#000" opacity=".16"/>
+<path d="M15 80H45L47 93Q30 99 13 93Z" fill="#16222f" opacity=".8"/>
+<rect x="11" y="6" width="11" height="5" rx="2.5" fill="#fff3bf"/><rect x="38" y="6" width="11" height="5" rx="2.5" fill="#fff3bf"/>
+<rect x="11" y="100" width="11" height="4" rx="2" fill="#ff4d4d"/><rect x="38" y="100" width="11" height="4" rx="2" fill="#ff4d4d"/>
+</symbol></defs></svg>
 
+<div class="hero"><div class="wrap hero-in">
+  <div>
+    <div class="brand"><div class="psign" aria-hidden="true">P</div><div><h1>Parking Tracker</h1><p>Log cars in and out, and see who is on the lot.</p></div></div>
+    <div class="top"><div class="clock"><span id="clk">--:--</span><small id="dt"></small></div><a class="pill" href="/camera.html">Camera mode</a></div>
+  </div>
+  <div class="ring">
+    <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="12"/><circle id="arc" cx="60" cy="60" r="50" fill="none" stroke="#4ade80" stroke-width="12" stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .6s,stroke .3s"/></svg>
+    <div><div class="num" id="occ">0 / 12</div><div class="lbl" id="free">bays free</div><button id="btnBays">Change bays</button></div>
+  </div>
+</div></div>
+
+<main class="wrap">
   <section class="gate" aria-label="Gate">
     <div class="plate"><input id="plate" placeholder="ABC 123" autocomplete="off" maxlength="12" aria-label="Plate number" autofocus></div>
     <div class="btns"><button class="b-in" id="btnIn">Log entry</button><button class="b-out" id="btnOut">Log exit</button></div>
@@ -117,136 +140,124 @@ h2{flex-wrap:wrap}
   </section>
 
   <section class="stats">
-    <div class="stat"><b id="sIn">0</b><span>Cars on the lot</span></div>
-    <div class="stat"><b id="sToday">0</b><span>Visits today</span></div>
-    <div class="stat"><b id="sRevToday">$0.00</b><span>Fees today</span></div>
-    <div class="stat"><b id="sRev">$0.00</b><span>Fees all time</span></div>
+    <div class="stat" style="--c:#0a7ae0"><div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M3 12h14M13 6l6 6-6 6"/></svg></div><div><b id="sToday">0</b><span>Visits today</span></div></div>
+    <div class="stat" style="--c:#13874d"><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1 1-1.5 2.5-1.5s2.5.5 2.5 1.5-1 1.5-2.5 1.5-2.5.5-2.5 1.5 1 1.5 2.5 1.5 2.5-.5 2.5-1.5"/></svg></div><div><b id="sRevToday">$0.00</b><span>Fees today</span></div></div>
+    <div class="stat" style="--c:#8a5cf6"><div class="ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><div><b id="sRev">$0.00</b><span>Fees all time</span></div></div>
+    <div class="stat" style="--c:#e08a00"><div class="ic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><b id="sAvg">-</b><span>Average stay</span></div></div>
   </section>
 
   <div class="search"><input id="q" placeholder="Search a plate on the lot or in recent visits" autocomplete="off" aria-label="Search plates"></div>
 
-  <h2>On the lot <em id="lotCount"></em></h2>
-  <div class="lot" id="lot"></div>
+  <section class="lotp">
+    <div class="lh"><h2>Parking lot</h2><em id="lotCount"></em></div>
+    <div class="bays" id="lot"></div>
+  </section>
 
-  <h2>Recent visits <em id="histCount"></em><span class="sp" style="display:flex;gap:10px;align-items:center"><span class="seg" role="group" aria-label="Range"><button id="rAll" aria-pressed="true">All</button><button id="rToday" aria-pressed="false">Today</button></span><button class="ghost" id="btnCsv">Export CSV</button></span></h2>
+  <div class="hh"><h2>Recent visits</h2><em id="histCount"></em>
+    <span class="sp"><span class="seg" role="group" aria-label="Range"><button id="rAll" aria-pressed="true">All</button><button id="rToday" aria-pressed="false">Today</button></span><button class="ghost" id="btnCsv">Export CSV</button></span></div>
   <div class="hist"><table id="tHist"></table></div>
   <button class="ghost more" id="btnMore" hidden>Show more</button>
   <div class="foot" id="updated"></div>
-</div>
+</main>
 
 <script>
 var $=function(i){return document.getElementById(i)};
-var state={active:[],history:[],rate:3,stats:{today:0,revenue:0},q:"",shown:10,loaded:false,range:"all",known:null,fresh:{}};
-var busy=false;
+var state={active:[],history:[],rate:3,stats:{today:0,revenue:0},q:"",shown:10,loaded:false,range:"all",known:null,fresh:{},bays:12},busy=false;
+try{var b=parseInt(localStorage.getItem("bays"),10);if(b>0)state.bays=b}catch(e){}
+var COLORS=["#e5484d","#3b82f6","#f5a524","#16a34a","#8b5cf6","#0ea5a4","#d5dae1","#f97316"];
 function pw(){try{return localStorage.getItem("pw")||""}catch(e){return ""}}
 function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function tm(d){return new Date(d).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
-function day(t){
-  var d=new Date(t),n=new Date(),y=new Date();y.setDate(n.getDate()-1);
-  if(d.toDateString()===n.toDateString())return "Today "+tm(d);
-  if(d.toDateString()===y.toDateString())return "Yesterday "+tm(d);
-  return d.toLocaleDateString([],{month:"short",day:"numeric"})+" "+tm(d);
-}
+function day(t){var d=new Date(t),n=new Date(),y=new Date();y.setDate(n.getDate()-1);
+  if(d.toDateString()===n.toDateString())return "Today "+tm(d);if(d.toDateString()===y.toDateString())return "Yesterday "+tm(d);
+  return d.toLocaleDateString([],{month:"short",day:"numeric"})+" "+tm(d)}
 function dur(ms){var m=Math.max(0,Math.floor(ms/60000)),h=Math.floor(m/60),d=Math.floor(h/24);if(d)return d+"d "+(h%24)+"h";return(h?h+"h ":"")+(m%60)+"m"}
 function est(ms){return Math.max(1,Math.ceil(ms/3600000))*state.rate}
+function money(n){return "$"+Number(n).toFixed(2)}
+function norm(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
+function match(p){var q=norm(state.q);return !q||norm(p).indexOf(q)>-1}
+function hue(p){var h=0;for(var i=0;i<p.length;i++)h=(h*31+p.charCodeAt(i))>>>0;return COLORS[h%COLORS.length]}
 var msgTimer;
 function msg(t,c){var e=$("msg");e.textContent=t;e.className="msg "+(c||"");clearTimeout(msgTimer);if(c==="good")msgTimer=setTimeout(function(){e.textContent="";e.className="msg"},8000);if(navigator.vibrate)navigator.vibrate(c==="bad"?[60,40,60]:25)}
 function setBtns(){var ok=!busy&&norm($("plate").value).length>=1;$("btnIn").disabled=$("btnOut").disabled=!ok}
 function tick(){var d=new Date();$("clk").textContent=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});$("dt").textContent=d.toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"})}
-function norm(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"")}
-function match(p){var q=norm(state.q);return !q||norm(p).indexOf(q)>-1}
-function money(n){return "$"+Number(n).toFixed(2)}
 
 async function api(path,method,body){
   var r=await fetch(path,{method:method||"GET",headers:{"Content-Type":"application/json","x-app-password":pw()},body:body?JSON.stringify(body):undefined});
-  if(r.status===401){
-    var p=prompt("Enter the password");
-    if(p){try{localStorage.setItem("pw",p)}catch(e){}return api(path,method,body)}
-    throw new Error("Password required");
-  }
-  var d=await r.json().catch(function(){return{}});
-  if(!r.ok)throw new Error(d.error||"Request failed");
-  return d;
-}
+  if(r.status===401){var p=prompt("Enter the password");if(p){try{localStorage.setItem("pw",p)}catch(e){}return api(path,method,body)}throw new Error("Password required")}
+  var d=await r.json().catch(function(){return{}});if(!r.ok)throw new Error(d.error||"Request failed");return d}
 async function act(kind,plate){
-  plate=plate||$("plate").value;
-  busy=true;setBtns();
-  try{
-    var r=await api("/api/"+kind,"POST",{plate:plate});
+  plate=plate||$("plate").value;busy=true;setBtns();
+  try{var r=await api("/api/"+kind,"POST",{plate:plate});
     if(kind==="entry")msg(r.plate+" entered at "+tm(r.entry_time),"good");
     else msg(r.plate+" left after "+dur(new Date(r.exit_time)-new Date(r.entry_time))+". Fee: "+money(r.fee),"good");
-    $("plate").value="";await load();
-  }catch(e){msg(e.message,"bad")}
-  busy=false;setBtns();$("plate").focus();
-}
+    $("plate").value="";await load()}catch(e){msg(e.message,"bad")}
+  busy=false;setBtns();$("plate").focus()}
 
-function renderStats(){
-  var n=new Date().toDateString(),ft=0;
-  state.history.forEach(function(r){if(new Date(r.exit_time).toDateString()===n)ft+=Number(r.fee||0)});
-  $("sIn").textContent=state.active.length;$("sToday").textContent=state.stats.today;
-  $("sRevToday").textContent=money(ft);$("sRev").textContent=money(state.stats.revenue);
+function renderTop(){
+  var n=new Date().toDateString(),ft=0,tot=0;
+  state.history.forEach(function(r){tot+=new Date(r.exit_time)-new Date(r.entry_time);if(new Date(r.exit_time).toDateString()===n)ft+=Number(r.fee||0)});
+  $("sToday").textContent=state.stats.today;$("sRevToday").textContent=money(ft);$("sRev").textContent=money(state.stats.revenue);
+  $("sAvg").textContent=state.history.length?dur(tot/state.history.length):"-";
+  var used=state.active.length,cap=Math.max(state.bays,used),pct=cap?used/cap:0;
+  $("occ").textContent=used+" / "+cap;$("free").textContent=(cap-used)+" bays free";
+  var a=$("arc");a.style.strokeDashoffset=314.16*(1-Math.min(1,pct));a.style.stroke=pct<.7?"#4ade80":pct<.9?"#fbbf24":"#f87171";
 }
 function renderLot(){
-  if(!state.loaded){$("lot").innerHTML="<div class='skel'></div><div class='skel'></div><div class='skel'></div>";return}
+  if(!state.loaded){$("lot").innerHTML="<div class='skel'></div><div class='skel'></div><div class='skel'></div><div class='skel'></div>";return}
   var all=state.active.slice().sort(function(a,b){return new Date(a.entry_time)-new Date(b.entry_time)});
   var a=all.filter(function(r){return match(r.plate)});
   $("lotCount").textContent=all.length?(state.q?a.length+" of ":"")+all.length+(all.length===1?" car":" cars"):"";
-  if(!a.length){$("lot").innerHTML="<div class='empty'>"+(all.length?"No parked car matches that search.":"The lot is empty. Type a plate above and press Log entry.")+"</div>";return}
-  $("lot").innerHTML=a.map(function(r){
-    var ms=Date.now()-new Date(r.entry_time);
-    var cls=ms>=864e5?" over":ms>=432e5?" long":"",bd=ms>=864e5?"<span class='badge over'>Over 24 hours</span>":ms>=432e5?"<span class='badge long'>Long stay</span>":"";
-    return "<div class='stall"+cls+(state.fresh[r.id]?" new":"")+"'><div class='chip'>"+esc(r.plate)+"</div>"+bd+
-      "<div class='t'>In "+day(r.entry_time)+"<br>Parked <b>"+dur(ms)+"</b> &middot; est. <b>"+money(est(ms))+"</b></div>"+
-      "<button data-p='"+esc(r.plate)+"'>Log exit</button></div>";
-  }).join("");
+  var h=a.map(function(r){
+    var ms=Date.now()-new Date(r.entry_time),cls=ms>=864e5?" over":ms>=432e5?" long":"",
+    bd=ms>=864e5?"<span class='badge over'>Over 24h</span>":ms>=432e5?"<span class='badge'>Long stay</span>":"";
+    return "<div class='bay"+cls+(state.fresh[r.id]?" new":"")+"'>"+bd+"<svg class='car' style='color:"+hue(r.plate)+"'><use href='#car'/></svg><div class='chip'>"+esc(r.plate)+"</div>"+
+      "<div class='bt'>In "+day(r.entry_time)+"<br>Parked <b>"+dur(ms)+"</b> &middot; est. <b>"+money(est(ms))+"</b></div><button data-p='"+esc(r.plate)+"'>Log exit</button></div>"});
+  if(!state.q){for(var i=a.length;i<Math.max(state.bays,0);i++)h.push("<div class='bay free'>Free</div>")}
+  else if(!a.length)h=["<div class='empty'>No parked car matches that search.</div>"];
+  $("lot").innerHTML=h.join("")||"<div class='empty'>The lot is empty. Type a plate above and press Log entry.</div>";
 }
 function renderHist(){
-  var nd=new Date().toDateString();var f=state.history.filter(function(r){return match(r.plate)&&(state.range==="all"||new Date(r.exit_time).toDateString()===nd)});
+  var nd=new Date().toDateString(),f=state.history.filter(function(r){return match(r.plate)&&(state.range==="all"||new Date(r.exit_time).toDateString()===nd)});
   $("histCount").textContent=state.history.length?(f.length>state.shown?"showing "+state.shown+" of "+f.length:f.length+(f.length===1?" visit":" visits")):"";
   $("btnMore").hidden=f.length<=state.shown;
   if(!f.length){$("tHist").innerHTML="<tr><td style='color:var(--muted);padding:18px 8px'>"+(!state.loaded?"Loading...":state.history.length?"Nothing matches. Try clearing the search or choosing All.":"No completed visits yet. They show up here after a car leaves.")+"</td></tr>";return}
-  var h="<tr><th>Plate</th><th>In</th><th>Out</th><th>Time parked</th><th>Fee</th></tr>";
-  f.slice(0,state.shown).forEach(function(r){h+="<tr><td class='pl'>"+esc(r.plate)+"</td><td>"+day(r.entry_time)+"</td><td>"+day(r.exit_time)+"</td><td>"+dur(new Date(r.exit_time)-new Date(r.entry_time))+"</td><td class='fee'>"+money(r.fee)+"</td></tr>"});
-  $("tHist").innerHTML=h;
+  var h="<thead><tr><th>Plate</th><th>In</th><th>Out</th><th>Time parked</th><th>Fee</th></tr></thead><tbody>";
+  f.slice(0,state.shown).forEach(function(r){h+="<tr><td><span class='pc'>"+esc(r.plate)+"</span></td><td>"+day(r.entry_time)+"</td><td>"+day(r.exit_time)+"</td><td>"+dur(new Date(r.exit_time)-new Date(r.entry_time))+"</td><td class='fee'><span class='fp'>"+money(r.fee)+"</span></td></tr>"});
+  $("tHist").innerHTML=h+"</tbody>";
 }
-function render(){renderStats();renderLot();renderHist()}
+function render(){renderTop();renderLot();renderHist()}
 async function load(){
-  try{
-    var d=await api("/api/records");
+  try{var d=await api("/api/records");
     state.active=d.active;state.history=d.history;state.stats=d.stats;if(d.rate)state.rate=d.rate;
     var ids={};d.active.forEach(function(r){ids[r.id]=1});state.fresh={};
     if(state.known){d.active.forEach(function(r){if(!state.known[r.id])state.fresh[r.id]=1})}
     state.known=ids;state.loaded=true;
     $("updated").textContent="Updated "+new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit",second:"2-digit"})+". Refreshes every 30 seconds.";
-    render();state.fresh={};
-  }catch(e){$("updated").textContent="Could not refresh: "+e.message+". Trying again soon."}
-}
+    render();state.fresh={}}
+  catch(e){$("updated").textContent="Could not refresh: "+e.message+". Trying again soon."}}
 function csv(){
   var rows=[["Plate","Time in","Time out","Minutes parked","Fee"]];
   state.history.forEach(function(r){rows.push([r.plate,new Date(r.entry_time).toLocaleString(),new Date(r.exit_time).toLocaleString(),Math.round((new Date(r.exit_time)-new Date(r.entry_time))/60000),Number(r.fee).toFixed(2)])});
   var text=rows.map(function(r){return r.map(function(c){return '"'+String(c).replace(/"/g,'""')+'"'}).join(",")}).join("\n");
   var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:"text/csv"}));
-  a.download="parking-visits-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove();
-}
+  a.download="parking-visits-"+new Date().toISOString().slice(0,10)+".csv";document.body.appendChild(a);a.click();a.remove()}
+function setRange(r){state.range=r;state.shown=10;$("rAll").setAttribute("aria-pressed",String(r==="all"));$("rToday").setAttribute("aria-pressed",String(r==="today"));renderHist()}
 
-$("btnIn").onclick=function(){act("entry")};
-$("btnOut").onclick=function(){act("exit")};
+$("btnIn").onclick=function(){act("entry")};$("btnOut").onclick=function(){act("exit")};
 $("plate").onkeydown=function(e){if(e.key==="Enter"&&norm(this.value).length>=1)act(e.shiftKey?"exit":"entry")};
 $("plate").oninput=function(){var v=this.value.toUpperCase().replace(/[^A-Z0-9 -]/g,"");if(v!==this.value)this.value=v;setBtns()};
-$("lot").onclick=function(e){
-  var b=e.target,p=b.getAttribute&&b.getAttribute("data-p");if(!p)return;
+$("lot").onclick=function(e){var b=e.target,p=b.getAttribute&&b.getAttribute("data-p");if(!p)return;
   if(b.classList.contains("armed")){act("exit",p);return}
   b.classList.add("armed");b.textContent="Tap again to confirm";
-  setTimeout(function(){if(b.isConnected){b.classList.remove("armed");b.textContent="Log exit"}},3000);
-};
+  setTimeout(function(){if(b.isConnected){b.classList.remove("armed");b.textContent="Log exit"}},3000)};
 $("q").oninput=function(){state.q=this.value;state.shown=10;render()};
 $("btnMore").onclick=function(){state.shown+=10;renderHist()};
-function setRange(r){state.range=r;state.shown=10;$("rAll").setAttribute("aria-pressed",String(r==="all"));$("rToday").setAttribute("aria-pressed",String(r==="today"));renderHist()}
 $("rAll").onclick=function(){setRange("all")};$("rToday").onclick=function(){setRange("today")};
 $("btnCsv").onclick=csv;
-tick();setBtns();render();setInterval(tick,15000);
-setInterval(renderLot,20000);
-setInterval(load,30000);load();
+$("btnBays").onclick=function(){var v=parseInt(prompt("How many parking bays does the lot have?",state.bays),10);
+  if(v>0&&v<=500){state.bays=v;try{localStorage.setItem("bays",v)}catch(e){}render()}};
+tick();setBtns();render();setInterval(tick,15000);setInterval(renderLot,20000);setInterval(load,30000);load();
 </script>
 </body>
 </html>
